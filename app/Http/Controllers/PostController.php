@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -11,8 +12,19 @@ class PostController extends Controller
         return view('/create-post');
     }
 
-    public function storeNewPost()
+    public function storeNewPost(Request $request)
     {
-        return 'Hey!!';
+        $incomingFields = $request->validate([
+            'title' => 'required',
+            'body' => 'required'
+        ]);
+
+        $incomingFields['title'] = strip_tags($incomingFields['title']);
+        $incomingFields['body'] = strip_tags($incomingFields['body']);
+        $incomingFields['user_id'] = auth()->id();
+
+        Post::create($incomingFields);
+
+        return redirect('/')->with('success', 'Post Added!');
     }
 }
