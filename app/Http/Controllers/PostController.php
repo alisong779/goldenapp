@@ -23,8 +23,13 @@ class PostController extends Controller
         $incomingFields['body'] = strip_tags($incomingFields['body']);
         $incomingFields['user_id'] = auth()->id();
 
-        Post::create($incomingFields);
+        $newPost = Post::create($incomingFields);
 
-        return redirect('/')->with('success', 'Post Added!');
+        return redirect("/post/{$newPost->id}")->with('success', 'New post successfully created.');
+    }
+
+    public function viewSinglePost(Post $post)
+    {
+        return view('/single-post', ['post' => $post]);
     }
 }
