@@ -37,9 +37,6 @@ class PostController extends Controller
 
     public function delete(Post $post)
     {
-        if (auth()->user()->cannot('delete', $post)) {
-            return 'Unable to delete';
-        }
         $post->delete();
         return redirect('/profile/' . auth()->user()->username)->with('success', 'Deleted!');
     }
